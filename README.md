@@ -1,2 +1,2 @@
-# boston-info
-Boston Info Slack App
+# Boston Info Slack App
+
