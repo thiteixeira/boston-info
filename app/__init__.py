@@ -10,8 +10,8 @@ def create_app(config_name):
 
     @app.route("/", methods=["GET"])
     def home():
-        """This route renders a hello world text."""
+        """This route renders a sample text."""
         # rendering text
-        return 'Hello World'
+        return 'Welcome to the Boston Info Slack Bot'
 
     return app
