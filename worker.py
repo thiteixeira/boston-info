@@ -25,7 +25,7 @@ import datetime
 
 gis = GIS()
 
-SLACK_BOT_TOKEN = 'xoxb-5176465338-588736110386-qRkIstpNJLhHyAves0iKnjNF'
+SLACK_BOT_TOKEN = ''
 URL = "https://services.arcgis.com/sFnw0xNflSi8J0uh/arcgis/rest/" \
       "services/food_trucks_schedule/FeatureServer/0/"
 QUERY = {'where': '1=1', 'out_sr': '4326'}
