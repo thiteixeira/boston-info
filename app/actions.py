@@ -1,20 +1,25 @@
 import time
-from datetime import datetime, date, timedelta
+import datetime
 from config import get_env
 import re
 from app.utils.arcgis_helpers import ArcGisHelpers
+from slackclient import SlackClient
 
 # constants
 RTM_READ_DELAY = 1  # 1 second delay between reading from RTM
-EXAMPLE_COMMAND = "food trucks"
 MENTION_REGEX = "^<@(|[WU].+?)>(.*)"
+# starterbot's user ID in Slack: value is assigned after the bot starts up
+starterbot_id = None
 
-# TODO: Get rid of these hard-coded constanst
-URL = "https://services.arcgis.com/sFnw0xNflSi8J0uh/arcgis/rest/services/" \
-      "food_trucks_schedule/FeatureServer/0/"
+# TODO: Get rid of these hard-coded things
+EXAMPLE_COMMAND = "food trucks"
+URL = "https://services.arcgis.com/sFnw0xNflSi8J0uh/arcgis/rest/" \
+      "services/food_trucks_schedule/FeatureServer/0/"
 QUERY = {'where': '1=1', 'out_sr': '4326'}
-DAY = datetime.today().strftime('%A')
 MILE = 1600
+DAY = datetime.datetime.today().strftime('%A')
+SLACK_BOT_TOKEN = 'xoxb-5176465338-588736110386-qRkIstpNJLhHyAves0iKnjNF'
+slack_client = SlackClient(SLACK_BOT_TOKEN)
 
 
 class Actions:
@@ -27,8 +32,8 @@ class Actions:
         """
         Parses a list of events coming from the Slack RTM API to find
         bot commands.
-        If a bot command is found, this function returns a tuple of
-        command and channel.
+        If a bot command is found, this function returns a tuple of command
+        and channel.
         If its not found, then this function returns None, None.
         """
         for event in slack_events:
@@ -42,20 +47,19 @@ class Actions:
     def parse_direct_mention(message_text):
         """
         Finds a direct mention (a mention that is at the beginning)
-        in message text
-        and returns the user ID which was mentioned. If there is no
-        direct mention, returns None
+        in message text and returns the user ID which was mentioned.
+        If there is no direct mention, returns None
         """
         matches = re.search(MENTION_REGEX, message_text)
-        # the first group contains the username,
-        # the second group contains the remaining message
+        # the first group contains the username, the second group
+        # contains the remaining message
         return (matches.group(1), matches.group(2).strip()) if matches else (
-        None, None)
+            None, None)
 
     @staticmethod
     def handle_command(command, channel):
         """
-            Executes bot command if the command is known
+        Executes bot command if the command is known
         """
         # Default response is help text for the user
         default_response = "Not sure what you mean. Try *{}*.".format(
@@ -66,7 +70,7 @@ class Actions:
         # This is where you start to implement more commands!
         if command.startswith(EXAMPLE_COMMAND):
             response = "Here's what I found:\n"
-            address = ArcGisHelpers.geocode_address("290 Congress Street")
+            address = ArcGisHelpers.geocode_address("220 Clarendon Street")
             trucks = ArcGisHelpers.get_feature_location(URL, QUERY)
 
             trucks_today = []

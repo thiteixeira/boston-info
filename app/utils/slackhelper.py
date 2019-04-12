@@ -5,7 +5,7 @@ from config import get_env
 class SlackHelper:
 
     def __init__(self):
-        self.slack_token = get_env('SLACK_TOKEN')
+        self.slack_token = get_env('SLACK_BOT_TOKEN')
         self.slack_client = SlackClient(self.slack_token)
         self.slack_channel = get_env('SLACK_CHANNEL')
 
