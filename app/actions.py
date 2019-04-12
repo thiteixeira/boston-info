@@ -2,7 +2,7 @@ import os
 import datetime
 import re
 from slackclient import SlackClient
-from utils.arcgis_helpers import geocode_address, get_feature_location, get_geodesic_distance
+from app.utils.arcgis_helpers import geocode_address, get_feature_location, get_geodesic_distance
 
 # TODO: Add more commands
 EXAMPLE_COMMAND = ['food trucks']

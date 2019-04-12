@@ -1,6 +1,5 @@
 from flask_api import FlaskAPI
 from config.env import app_env
-from app.utils.slackhelper import SlackHelper
 
 
 def create_app(config_name):
