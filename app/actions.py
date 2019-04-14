@@ -8,10 +8,7 @@ from app.utils.arcgis_helpers import geocode_address, get_feature_location, \
 # TODO: Add more commands
 EXAMPLE_COMMAND = 'food trucks'
 MENTION_REGEX = '^<@(|[WU].+?)>(.*)'
-
-# starterbot's user ID in Slack: value is assigned after the bot starts up
-starterbot_id = None
-slack_client = SlackClient(os.environ.get('SLACK_BOT_TOKEN'))
+sc = SlackClient(os.environ.get('SLACK_BOT_TOKEN'))
 
 # TODO: Get rid of these hard-coded things
 URL = "https://services.arcgis.com/sFnw0xNflSi8J0uh/arcgis/rest/" \
@@ -23,22 +20,27 @@ DAY = datetime.datetime.today().strftime('%A')
 
 def parse_bot_commands(slack_events):
     """
-    Parses a list of events coming from the Slack RTM API to find
-    bot commands.
-    If a bot command is found, this function returns a tuple of command
-    and channel.
-    If its not found, then this function returns None, None.
+    Iterates through a list of events from the SLACK RTM API.
+    If a bot command is found, it returns a tuple, else, returns None.
+    :param slack_events:
+    :return: tuple with command and channel
     """
-    starterbot_id = slack_client.api_call("auth.test")["user_id"]
+    bot_id = sc.api_call("auth.test")["user_id"]
     for event in slack_events:
-        if event["type"] == "message" and not "subtype" in event:
+        if event["type"] == "message" and "subtype" not in event:
             user_id, message = parse_direct_mention(event["text"])
-            if user_id == starterbot_id:
+            if user_id == bot_id:
                 return message, event["channel"]
     return None, None
 
 
 def parse_direct_mention(message_text):
+    """
+    Find mention at the beginning of the message and returns the user id
+    and the message text.
+    :param message_text:
+    :return: user id, message
+    """
     """
     Finds a direct mention (a mention that is at the beginning)
     in message text and returns the user ID which was mentioned.
@@ -53,7 +55,10 @@ def parse_direct_mention(message_text):
 
 def handle_command(command, channel):
     """
-    Executes bot command if the command is known
+    If bot command is known, handle it, else, return example
+    :param command:
+    :param channel:
+    :return:
     """
     # Default response is help text for the user
     default_response = "Not sure what you mean. Try *{}*.".format(
@@ -82,7 +87,7 @@ def handle_command(command, channel):
                              t['attributes']['End_time'] + '\n')
 
     # Sends the response back to the channel
-    slack_client.api_call(
+    sc.api_call(
         "chat.postMessage",
         channel=channel,
         text=response or default_response

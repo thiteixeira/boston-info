@@ -1,10 +1,12 @@
 # export FLASK_APP=boston-info.py
 # debug mode: export FLASK_ENV=development
 # flask run
-from config import get_env
-from app import create_app
+from flask import Flask
+app = Flask(__name__)
 
-app = create_app(get_env('APP_ENV'))
 
-if __name__ == '__main__':
-    app.run()
+@app.route("/boston-info", methods=["GET", "POST"])
+def boston_info():
+    """This route renders a sample text."""
+    # rendering text
+    return 'Welcome to the Boston Info Slack Bot'

@@ -1,2 +1,2 @@
-#web: gunicorn boston-info:app
+web: gunicorn boston-info:app
 worker: python worker.py
