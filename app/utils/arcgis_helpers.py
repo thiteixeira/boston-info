@@ -36,7 +36,7 @@ def geocode_address(m_address):
 
 
 def get_geodesic_distance(feature1, feature2):
-    geometry1 = feature1['geometry']
+    geometry1 = feature1#['geometry']
     geometry2 = feature2['geometry']
     spation_ref = {"wkid": 4326}
     return geometry.distance(spation_ref,

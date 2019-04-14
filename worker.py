@@ -14,8 +14,6 @@ RTM_READ_DELAY = 1  # 1 second delay between reading from RTM
 if __name__ == '__main__':
     if slack_client.rtm_connect(with_team_state=False):
         print('Boston Info Slack Bot connected and running!')
-        # Read bot's user ID by calling Web API method `auth.test`
-        starterbot_id = slack_client.api_call("auth.test")["user_id"]
         while True:
             command, channel = parse_bot_commands(slack_client.rtm_read())
             if command:

@@ -2,10 +2,11 @@ import os
 import datetime
 import re
 from slackclient import SlackClient
-from app.utils.arcgis_helpers import geocode_address, get_feature_location, get_geodesic_distance
+from app.utils.arcgis_helpers import geocode_address, get_feature_location, \
+    get_geodesic_distance
 
 # TODO: Add more commands
-EXAMPLE_COMMAND = ['food trucks']
+EXAMPLE_COMMAND = 'food trucks'
 MENTION_REGEX = '^<@(|[WU].+?)>(.*)'
 
 # starterbot's user ID in Slack: value is assigned after the bot starts up
@@ -28,6 +29,7 @@ def parse_bot_commands(slack_events):
     and channel.
     If its not found, then this function returns None, None.
     """
+    starterbot_id = slack_client.api_call("auth.test")["user_id"]
     for event in slack_events:
         if event["type"] == "message" and not "subtype" in event:
             user_id, message = parse_direct_mention(event["text"])
@@ -55,7 +57,7 @@ def handle_command(command, channel):
     """
     # Default response is help text for the user
     default_response = "Not sure what you mean. Try *{}*.".format(
-        EXAMPLE_COMMAND[0])
+        EXAMPLE_COMMAND)
 
     # Finds and executes the given command, filling in response
     response = None
