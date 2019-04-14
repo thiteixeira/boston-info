@@ -7,8 +7,8 @@ def create_app(config_name):
     app.config.from_object(app_env[config_name])
     app.config.from_pyfile('../config/env.py')
 
-    @app.route("/", methods=["GET"])
-    def home():
+    @app.route("/boston-info", methods=["GET", "POST"])
+    def boston_info():
         """This route renders a sample text."""
         # rendering text
         return 'Welcome to the Boston Info Slack Bot'
