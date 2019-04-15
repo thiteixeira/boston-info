@@ -1,7 +1,8 @@
 import os
 import re
 from slackclient import SlackClient
-from app.utils.food_trucks import  food_trucks
+from app.utils.food_trucks import food_trucks
+from app.utils.farmers_markets import farmers_markets
 
 # TODO: Add more commands
 EXAMPLE_COMMAND = ['food trucks', 'farmers markets']
@@ -51,17 +52,18 @@ def handle_command(command, channel):
     :param channel:
     :return:
     """
+    print('Received command: ' + str(command))
     # Default response is help text for the user
     default_response = 'I don\'t know that. Try *{}* or *{}*.'.format(
         EXAMPLE_COMMAND[0], EXAMPLE_COMMAND[1])
 
     # Finds and executes the given command, filling in response
-    response = None
+    response = ''
     # This is where you start to implement more commands!
-    if command.startswith(EXAMPLE_COMMAND[0]):
-        if command == 'food trucks':
-            response = food_trucks()
-
+    if command.startswith(EXAMPLE_COMMAND[0]) and command == 'food trucks':
+        response = food_trucks()
+    if command.startswith(EXAMPLE_COMMAND[1]) and command == 'farmers markets':
+        response = farmers_markets()
     # Sends the response back to the channel
     sc.api_call(
         "chat.postMessage",
