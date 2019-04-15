@@ -61,7 +61,7 @@ def handle_command(command, channel):
     :return:
     """
     # Default response is help text for the user
-    default_response = "Not sure what you mean. Try *{}*.".format(
+    default_response = 'I don\' know that. Try *{}*.'.format(
         EXAMPLE_COMMAND)
 
     # Finds and executes the given command, filling in response
@@ -81,10 +81,11 @@ def handle_command(command, channel):
         for t in trucks_today:
             distance = get_geodesic_distance(address, t)
             if distance <= MILE:
-                response += (t['attributes']['Truck'] + ' is located at ' +
-                             t['attributes']['Loc'] + ' between ' +
-                             t['attributes']['Start_time'] + ' and ' +
-                             t['attributes']['End_time'] + '\n')
+                response += (
+                        '*' + t['attributes']['Truck'] + '* is located at ' +
+                        t['attributes']['Loc'] + ', between ' +
+                        t['attributes']['Start_time'] + ' and ' +
+                        t['attributes']['End_time'] + '\n')
 
     # Sends the response back to the channel
     sc.api_call(
