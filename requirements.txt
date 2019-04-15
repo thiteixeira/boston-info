@@ -3,4 +3,4 @@ Flask-API==1.0
 gunicorn==19.8.1
 slackclient==1.2.1
 arcgis==1.4.0
-python-dotenv==0.8.2
+pytz==2018.5

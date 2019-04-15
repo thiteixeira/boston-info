@@ -1,21 +1,12 @@
 import os
-import datetime
 import re
 from slackclient import SlackClient
-from app.utils.arcgis_helpers import geocode_address, get_feature_location, \
-    get_geodesic_distance
+from app.utils.food_trucks import  food_trucks
 
 # TODO: Add more commands
-EXAMPLE_COMMAND = 'food trucks'
+EXAMPLE_COMMAND = ['food trucks', 'farmers markets']
 MENTION_REGEX = '^<@(|[WU].+?)>(.*)'
 sc = SlackClient(os.environ.get('SLACK_BOT_TOKEN'))
-
-# TODO: Get rid of these hard-coded things
-URL = "https://services.arcgis.com/sFnw0xNflSi8J0uh/arcgis/rest/" \
-      "services/food_trucks_schedule/FeatureServer/0/"
-QUERY = {'where': '1=1', 'out_sr': '4326'}
-MILE = 1600
-DAY = datetime.datetime.today().strftime('%A')
 
 
 def parse_bot_commands(slack_events):
@@ -61,31 +52,15 @@ def handle_command(command, channel):
     :return:
     """
     # Default response is help text for the user
-    default_response = 'I don\'t know that. Try *{}*.'.format(
-        EXAMPLE_COMMAND)
+    default_response = 'I don\'t know that. Try *{}* or *{}*.'.format(
+        EXAMPLE_COMMAND[0], EXAMPLE_COMMAND[1])
 
     # Finds and executes the given command, filling in response
     response = None
     # This is where you start to implement more commands!
-    if command.startswith(EXAMPLE_COMMAND):
-        response = "Here's what I found:\n"
-        address = geocode_address("220 Clarendon Street")
-        trucks = get_feature_location(URL, QUERY)
-
-        trucks_today = []
-        for t in trucks:
-            if (t['attributes']['Day'] == DAY and
-                    t['attributes']['Time'] == 'Lunch'):
-                trucks_today.append(t)
-
-        for t in trucks_today:
-            distance = get_geodesic_distance(address, t)
-            if distance <= MILE:
-                response += (
-                        '*' + t['attributes']['Truck'] + '* is located at ' +
-                        t['attributes']['Loc'] + ', between ' +
-                        t['attributes']['Start_time'] + ' and ' +
-                        t['attributes']['End_time'] + '\n')
+    if command.startswith(EXAMPLE_COMMAND[0]):
+        if command == 'food trucks':
+            response = food_trucks()
 
     # Sends the response back to the channel
     sc.api_call(
