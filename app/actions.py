@@ -61,7 +61,7 @@ def handle_command(command, channel):
     :return:
     """
     # Default response is help text for the user
-    default_response = 'I don\' know that. Try *{}*.'.format(
+    default_response = 'I don\'t know that. Try *{}*.'.format(
         EXAMPLE_COMMAND)
 
     # Finds and executes the given command, filling in response
