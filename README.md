@@ -18,6 +18,7 @@ Planned services and cities, but not limited:
 * BlueBikes
 * MBTA Status
 * MBTA CR Status
+* Lunch Nearby
 * ...
 
 ### Instructions
