@@ -3,9 +3,15 @@ import re
 from slackclient import SlackClient
 from app.utils.food_trucks import food_trucks
 from app.utils.farmers_markets import farmers_markets
+from app.utils.help import bot_help
 
-# TODO: Add more commands
-EXAMPLE_COMMAND = ['food trucks', 'farmers markets']
+##########
+# Commands
+##########
+FOOD_TRUCKS = 'food trucks'
+FARMERS_MARKETS = 'farmers markets'
+HELP = 'help'
+
 MENTION_REGEX = '^<@(|[WU].+?)>(.*)'
 sc = SlackClient(os.environ.get('SLACK_BOT_TOKEN'))
 
@@ -55,15 +61,18 @@ def handle_command(command, channel):
     print('Received command: ' + str(command))
     # Default response is help text for the user
     default_response = 'I don\'t know that. Try *{}* or *{}*.'.format(
-        EXAMPLE_COMMAND[0], EXAMPLE_COMMAND[1])
+        HELP, FOOD_TRUCKS, FARMERS_MARKETS)
 
     # Finds and executes the given command, filling in response
     response = ''
     # This is where you start to implement more commands!
-    if command.startswith(EXAMPLE_COMMAND[0]) and command == 'food trucks':
+    if command.startswith(FOOD_TRUCKS) and command == 'food trucks':
         response = food_trucks()
-    if command.startswith(EXAMPLE_COMMAND[1]) and command == 'farmers markets':
+    if command.startswith(FARMERS_MARKETS) and command == 'farmers markets':
         response = farmers_markets()
+    if command.startswith(HELP) and command == 'help':
+        response = bot_help()
+
     # Sends the response back to the channel
     sc.api_call(
         "chat.postMessage",
